@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Cliente | ServTec</title>
+    <link rel="stylesheet" href="../../css/dashboards/dashboard-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Menú Hamburguesa (solo móvil) -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Overlay para móvil -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+                <!-- Avatar/Icono -->
+                <div class="profile-icon">
+                    <img src="https://media.istockphoto.com/id/470100848/vector/male-profile-icon-white-on-the-blue-background.jpg?s=612x612&w=0&k=20&c=2Z3As7KdHqSKB6UDBpSIbMkwOgYQtbhSWrF1ZHX505E=" alt="Perfil">
+                </div>
+
+                <!-- Opciones del menú -->
+                <nav class="sidebar-menu">
+                    <ul>
+                        <li>
+                            <a href="client-data.html">
+                                <i class="fas fa-user"></i>
+                                <span>Mis datos</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="client-computers.html">
+                                <i class="fas fa-laptop"></i>
+                                <span>Mis computadoras</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="client-budgets.html">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                                <span>Mis presupuestos</span>
+                            </a>
+                        </li>
+                        <li class="logout-item">
+                            <a href="#">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Cerrar sesión</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <!-- Mensaje de Bienvenida -->
+            <section class="welcome-section">
+                <h1>Bienvenido de vuelta, <span id="client-name">[Nombre Cliente]</span></h1>
+                <p>En ésta página podrás gestionar todos tus equipos y presupuestos.</p>
+            </section>
+
+            <!-- Tarjetas de Resumen -->
+            <div class="summary-cards">
+                <!-- Tarjeta 1: Equipos Registrados -->
+                <div class="summary-card" id="registered-computers">
+                    <div class="card-icon">
+                        <i class="fas fa-laptop"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Equipos registrados</h3>
+                        <p class="card-value" id="computers-count">0</p>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 2: En Reparación -->
+                <div class="summary-card" id="in-repair">
+                    <div class="card-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>En reparación</h3>
+                        <p class="card-value" id="repair-count">0</p>
+                    </div>
+                </div>
+
+                <!-- Tarjeta 3: Completados -->
+                <div class="summary-card" id="completed">
+                    <div class="card-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3>Completados</h3>
+                        <p class="card-value" id="completed-count">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Últimos Presupuestos -->
+            <section class="recent-budgets">
+                <div class="section-header">
+                    <h2>Últimos presupuestos</h2>
+                    <a href="client-budgets.html" class="view-all-btn">Ver todos</a>
+                </div>
+
+                <div class="budgets-list" id="budgets-list">
+                    <!-- Aquí se cargarán dinámicamente los presupuestos -->
+                    <div class="no-budgets">
+                        <i class="fas fa-file-alt"></i>
+                        <p>No hay presupuestos recientes</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script type="module" src="../../js/utils/mobile-menu.js"></script>
+    <script type="module" src="../../js/dashboards/client-dashboard.js"></script>
+    <script type="module" src="../../js/utils/session-utils.js"></script>
+</body>
+</html>

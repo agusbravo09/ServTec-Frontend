@@ -1,0 +1,503 @@
+/* Estilos base para la sección de presupuestos */
+.budgets-section {
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.section-header {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.section-header h1 {
+    margin: 0;
+    color: #333;
+    font-size: 24px;
+}
+
+/* Barra de acciones */
+.action-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.search-box input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    min-width: 0;
+}
+
+.btn-search, .btn-add {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.btn-search {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-search:hover {
+    background-color: #0069d9;
+}
+
+.btn-add {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-add:hover {
+    background-color: #218838;
+}
+
+/* Contenedor de la tabla */
+.budgets-table-container {
+    overflow-x: auto;
+    margin-top: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+/* Estilos de la tabla */
+.budgets-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+.budgets-table th, 
+.budgets-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.budgets-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+    position: sticky;
+    top: 0;
+}
+
+.budgets-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Estilos para estados */
+.status-pending {
+    color: #ffc107;
+    font-weight: 500;
+}
+
+.status-approved {
+    color: #28a745;
+    font-weight: 500;
+}
+
+.status-rejected {
+    color: #dc3545;
+    font-weight: 500;
+}
+
+.status-completed {
+    color: #17a2b8;
+    font-weight: 500;
+}
+
+/* Celdas de acciones */
+.actions-cell {
+    display: flex;
+    gap: 8px;
+}
+
+.actions-cell button {
+    padding: 6px 10px;
+    min-width: 32px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-view {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.btn-view:hover {
+    background-color: #138496;
+}
+
+.btn-edit {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.btn-edit:hover {
+    background-color: #e0a800;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+.btn-print {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-print:hover {
+    background-color: #5a6268;
+}
+
+/* MODALES */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #6c757d;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.close:hover {
+    color: #343a40;
+}
+
+/* Formularios en modales */
+.modal h2, .modal h3 {
+    margin-top: 0;
+    color: #343a40;
+}
+
+.modal h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.modal h3 {
+    font-size: 18px;
+    margin: 20px 0 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    flex: 1;
+    margin-bottom: 15px;
+}
+
+.form-group.small {
+    flex: 0 0 120px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #495057;
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-group input[readonly] {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}
+
+.input-with-button {
+    display: flex;
+    gap: 5px;
+}
+
+.input-with-button input {
+    flex: 1;
+}
+
+.btn-search-small, .btn-add-small {
+    padding: 10px;
+    min-width: 40px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-search-small {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-search-small:hover {
+    background-color: #0069d9;
+}
+
+.btn-add-small {
+    background-color: #6c757d;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.btn-add-small:hover {
+    background-color: #5a6268;
+}
+
+/* Items de trabajo y partes */
+.job-item, .part-item {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.remove-job, .remove-part {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Resumen */
+.summary {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 4px;
+    margin: 20px 0;
+}
+
+.summary .form-group input {
+    font-weight: bold;
+    text-align: right;
+}
+
+/* Botones de acción */
+.btn-save, .btn-print {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.btn-save {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-save:hover {
+    background-color: #218838;
+}
+
+.btn-print {
+    background-color: #17a2b8;
+    color: white;
+    margin-left: 10px;
+}
+
+.btn-print:hover {
+    background-color: #138496;
+}
+
+/* Media Queries para responsividad */
+@media (min-width: 768px) {
+    .action-bar {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .search-box {
+        width: auto;
+        min-width: 300px;
+    }
+
+    .section-header h1 {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 767px) {
+    .form-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .form-group.small {
+        flex: 1;
+    }
+
+    .modal-content {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .btn-search, .btn-add {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    .btn-add span {
+        display: none;
+    }
+
+    .budgets-table th, 
+    .budgets-table td {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+
+    .actions-cell {
+        gap: 5px;
+    }
+
+    .actions-cell button {
+        padding: 4px 6px;
+        min-width: 28px;
+    }
+}
+
+.no-items {
+    color: #6c757d;
+    font-style: italic;
+    text-align: center;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+/* Cambiar color del botón de vista/edición */
+.btn-view {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.btn-view:hover {
+    background-color: #e0a800;
+}
+
+/* Ocultar botón de editar separado (ya no es necesario) */
+.btn-edit {
+    display: none;
+}
+
+/* Estilos para inputs editables en el modal */
+.edit-job-description,
+.edit-job-hours,
+.edit-job-rate,
+.edit-part-description,
+.edit-part-quantity,
+.edit-part-price {
+    background-color: #fff !important;
+    cursor: text !important;
+}
+
+/* Input de fecha */
+input[type="date"] {
+    padding: 8px 12px;
+    height: 38px; /* Para que coincida con otros inputs */
+}

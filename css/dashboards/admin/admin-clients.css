@@ -1,0 +1,251 @@
+.clients-section {
+    margin: 32px 0;
+}
+
+.section-header h1 {
+    font-size: 1.5rem;
+    color: #3498db;
+    margin-bottom: 24px;
+    font-weight: 700;
+}
+
+.clients-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 32px;
+    align-items: start;
+}
+
+.computers-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.computers-list-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.client-form-card,
+.client-search-card,
+.client-edit-card,
+.computer-form-card,
+.computer-filter-card,
+.computer-list-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding: 24px 18px;
+    margin: 0; /* Elimina el margin-bottom para que el grid lo maneje */
+    max-width: 500px;
+    min-width: 0;
+}
+
+.computer-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding: 18px 14px;
+    margin: 0;
+    min-width: 0;
+}
+
+.client-form-card h2,
+.client-search-card h2,
+.client-edit-card h2 {
+    font-size: 1.15rem;
+    color: #2d3e50;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 0.98rem;
+    color: #555;
+    margin-bottom: 4px;
+}
+
+.form-group input {
+    padding: 8px 10px;
+    border: 1px solid #dbe6ec;
+    border-radius: 6px;
+    font-size: 1rem;
+    background: #f8fafc;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.btn-save, .btn-search, .btn-cancel, .btn-delete {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-right: 8px;
+    margin-top: 8px;
+    transition: background 0.2s;
+}
+
+.btn-save {
+    background: #3498db;
+    color: #fff;
+}
+
+.btn-search {
+    background: #2ecc71;
+    color: #fff;
+}
+
+.btn-cancel {
+    background: #f1c40f;
+    color: #fff;
+}
+
+.btn-delete {
+    background: #e74c3c;
+    color: #fff;
+}
+
+.success-message {
+    color: #2ecc71;
+    background: #eafaf1;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.error-message {
+    color: #e74c3c;
+    background: #fdecea;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.computers-stack > div {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding: 24px 18px;
+    margin-bottom: 32px;
+    max-width: 900px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.computers-stack h2 {
+    font-size: 1.15rem;
+    color: #2d3e50;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+/* Haz que la tarjeta de listado ocupe ambas columnas */
+.computer-list-card {
+    grid-column: 1 / span 2;
+}
+
+@media (max-width: 900px) {
+    .computer-list-card {
+        grid-column: span 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+    .client-form-card,
+    .client-search-card,
+    .client-edit-card {
+        max-width: 100%;
+        padding: 16px 8px;
+    }
+}
+
+/* Responsive: en móviles se apilan */
+@media (max-width: 900px) {
+    .clients-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+    .computers-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+    .computers-list-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    .computers-stack > div {
+        max-width: 100%;
+        padding: 16px 8px;
+    }
+}
+
+/* Modal styles */
+.modal {
+    position: fixed;
+    z-index: 9999;
+    left: 0; top: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 40px 32px;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    min-width: 340px;
+    max-width: 520px;
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.close {
+    position: absolute;
+    right: 18px;
+    top: 12px;
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .modal-content {
+        min-width: 0;
+        max-width: 98vw;
+        padding: 18px 8px;
+    }
+}

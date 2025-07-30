@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar Presupuestos | ServTec</title>
+    <link rel="stylesheet" href="../../css/dashboards/dashboard-styles.css">
+    <link rel="stylesheet" href="../../css/dashboards/admin/admin-dashboard.css">
+    <link rel="stylesheet" href="../../css/dashboards/admin/admin-budgets.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="dashboard-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+                <a href="admin-dashboard.html">
+                    <div class="profile-icon">
+                        <img src="https://media.istockphoto.com/id/470100848/vector/male-profile-icon-white-on-the-blue-background.jpg?s=612x612&w=0&k=20&c=2Z3As7KdHqSKB6UDBpSIbMkwOgYQtbhSWrF1ZHX505E=" alt="Perfil">
+                    </div>
+                </a>
+                <nav class="sidebar-menu">
+                    <ul>
+                        <li>
+                            <a href="admin-dashboard.html">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="admin-clients.html">
+                                <i class="fas fa-users"></i>
+                                <span>1. Clientes</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="admin-computers.html">
+                                <i class="fas fa-laptop"></i>
+                                <span>2. Computadoras</span>
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a href="#">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                                <span>3. Presupuestos</span>
+                            </a>
+                        </li>
+                        <li class="logout-item">
+                            <a href="#">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Cerrar sesión</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+        <main class="main-content">
+            <section class="budgets-section">
+                <div class="section-header">
+                    <h1>Administrar Presupuestos</h1>
+                    <div class="action-bar">
+                        <div class="search-box">
+                            <input type="text" id="search-budget" placeholder="Buscar por N° o DNI...">
+                            <button id="search-btn" class="btn-search"><i class="fas fa-search"></i></button>
+                        </div>
+                        <button id="add-budget-btn" class="btn-add"><i class="fas fa-plus"></i> Nuevo Presupuesto</button>
+                    </div>
+                </div>
+
+                <div class="budgets-table-container">
+                    <table class="budgets-table">
+                        <thead>
+                            <tr>
+                                <th>N° Presupuesto</th>
+                                <th>Cliente</th>
+                                <th>Computadora</th>
+                                <th>Fecha Emisión</th>
+                                <th>Fecha Vencimiento</th>
+                                <th>Estado</th>
+                                <th>Total</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="budgets-list">
+                            <!-- Los presupuestos se cargarán aquí dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal para nuevo presupuesto -->
+    <div id="add-budget-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="close-add-modal">&times;</span>
+            <h2>Nuevo Presupuesto</h2>
+            <form id="budget-form" autocomplete="off">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="budget-client-dni">DNI Cliente</label>
+                        <div class="input-with-button">
+                            <input type="text" id="budget-client-dni" maxlength="8" required>
+                            <button type="button" id="search-client-btn" class="btn-search-small"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="budget-client-name">Cliente</label>
+                        <input type="text" id="budget-client-name" readonly>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="budget-computer">Computadora</label>
+                        <select id="budget-computer" required disabled>
+                            <option value="">Seleccione computadora</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="budget-validity">Validez (días)</label>
+                        <select id="budget-validity" required>
+                            <option value="7">7 días</option>
+                            <option value="15" selected>15 días</option>
+                            <option value="30">30 días</option>
+                            <option value="60">60 días</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="budget-notes">Observaciones</label>
+                    <textarea id="budget-notes" rows="3"></textarea>
+                </div>
+
+                <h3>Items de Trabajo</h3>
+                <div id="jobs-container">
+                    <div class="job-item">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Descripción</label>
+                                <input type="text" class="job-description" required>
+                            </div>
+                            <div class="form-group small">
+                                <label>Horas</label>
+                                <input type="number" class="job-hours" min="0" step="0.5" value="1" required>
+                            </div>
+                            <div class="form-group small">
+                                <label>Precio/Hora</label>
+                                <input type="number" class="job-rate" min="0" value="500" required>
+                            </div>
+                            <div class="form-group small">
+                                <label>Subtotal</label>
+                                <input type="number" class="job-subtotal" readonly>
+                            </div>
+                            <button type="button" class="btn-delete remove-job"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" id="add-job-btn" class="btn-add-small"><i class="fas fa-plus"></i> Agregar Trabajo</button>
+
+                <h3>Partes/Repuestos</h3>
+                <div id="parts-container">
+                    <div class="part-item">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Descripción</label>
+                                <input type="text" class="part-description" required>
+                            </div>
+                            <div class="form-group small">
+                                <label>Cantidad</label>
+                                <input type="number" class="part-quantity" min="1" value="1" required>
+                            </div>
+                            <div class="form-group small">
+                                <label>Precio Unitario</label>
+                                <input type="number" class="part-price" min="0" required>
+                            </div>
+                            <div class="form-group small">
+                                <label>Subtotal</label>
+                                <input type="number" class="part-subtotal" readonly>
+                            </div>
+                            <button type="button" class="btn-delete remove-part"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" id="add-part-btn" class="btn-add-small"><i class="fas fa-plus"></i> Agregar Parte</button>
+
+                <div class="summary">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Total Trabajos</label>
+                            <input type="number" id="total-jobs" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Total Partes</label>
+                            <input type="number" id="total-parts" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Total Presupuesto</label>
+                            <input type="number" id="total-budget" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-save"><i class="fas fa-save"></i> Generar Presupuesto</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para ver/editar presupuesto -->
+<div id="edit-budget-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="close-edit-modal">&times;</span>
+        <h2>Presupuesto <span id="budget-number"></span></h2>
+        <form id="edit-budget-form" autocomplete="off">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Cliente</label>
+                    <input type="text" id="edit-client-name" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Computadora</label>
+                    <input type="text" id="edit-computer-info" readonly>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Fecha Emisión</label>
+                    <input type="text" id="edit-issue-date" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="edit-expiry-date">Fecha Vencimiento</label>
+                    <input type="text" id="edit-expiry-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-status">Estado</label>
+                    <select id="edit-status" required>
+                        <option value="Pendiente">Pendiente</option>
+                        <option value="Aprobado">Aprobado</option>
+                        <option value="Rechazado">Rechazado</option>
+                        <option value="Completado">Completado</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-notes">Observaciones</label>
+                <textarea id="edit-notes" rows="3"></textarea>
+            </div>
+
+            <h3>Items de Trabajo</h3>
+            <div id="edit-jobs-container">
+                <!-- Los trabajos se cargarán aquí dinámicamente -->
+            </div>
+            <button type="button" id="add-edit-job-btn" class="btn-add-small"><i class="fas fa-plus"></i> Agregar Trabajo</button>
+
+            <h3>Partes/Repuestos</h3>
+            <div id="edit-parts-container">
+                <!-- Las partes se cargarán aquí dinámicamente -->
+            </div>
+            <button type="button" id="add-edit-part-btn" class="btn-add-small"><i class="fas fa-plus"></i> Agregar Parte</button>
+
+            <div class="summary">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Total Trabajos</label>
+                        <input type="number" id="edit-total-jobs" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Partes</label>
+                        <input type="number" id="edit-total-parts" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Presupuesto</label>
+                        <input type="number" id="edit-total-budget" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-save"><i class="fas fa-save"></i> Guardar Cambios</button>
+            <button type="button" id="print-budget-btn" class="btn-print"><i class="fas fa-print"></i> Imprimir</button>
+        </form>
+    </div>
+</div>
+
+    <script type="module" src="../../js/utils/mobile-menu.js"></script>
+    <script type="module" src="../../js/utils/session-utils.js"></script>
+    <script type="module" src="../../js/dashboards/admin/admin-budgets.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+.metrics-section {
+    margin: 32px 0;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+}
+
+.metric-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding: 24px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 120px;
+    transition: box-shadow 0.2s;
+}
+
+.metric-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: #3498db;
+    font-weight: 600;
+}
+
+.metric-card p {
+    font-size: 1.05rem;
+    margin: 4px 0;
+    color: #333;
+}
+
+.metric-card span {
+    font-weight: bold;
+    color: #2ecc71;
+}
+
+.metric-card span[id*="ready"] {
+    color: #3498db;
+}
+
+.metric-card span[id*="in-repair"] {
+    color: #f39c12;
+}
+
+.metric-card span[id*="budgets-pending"] {
+    color: #f39c12;
+}
+
+.metric-card span[id*="budgets-rejected"] {
+    color: #e74c3c;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+    .metric-card {
+        min-height: 80px;
+        padding: 16px 10px;
+    }
+}
