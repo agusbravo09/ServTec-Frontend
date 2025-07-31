@@ -2,7 +2,7 @@
  * api.service.js - Servicio para manejar todas las llamadas API
  */
 
-const BASE_URL = window.env.NEXT_PUBLIC_BASE_URL;
+const BASE_URL = 'https://servtec-backend.onrender.com/api';
 
 // Función base para todas las peticiones HTTP
 async function makeRequest(endpoint, method = 'GET', data = null, params = {}) {
