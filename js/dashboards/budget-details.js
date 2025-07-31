@@ -45,7 +45,7 @@ export class BudgetDetails {
 
         this.detailsContainer.innerHTML = `
             <div class="budget-details-header">
-                <span class="budget-id">Presupuesto ${budget.budgetNumber}</span>
+                <span class="budget-id">Presupuesto #${budget.id}</span>
                 <span class="budget-status status-${budget.status.toLowerCase()}">
                     ${formatStatus(budget.status)}
                 </span>
@@ -141,7 +141,7 @@ export class BudgetDetails {
             // Recarga después de 1.5 segundos (para que se vea el mensaje)
             setTimeout(() => {
                 window.location.reload(); // ← Recarga completa
-            }, 500);
+            }, 200);
         } catch (error) {
             console.error('Error actualizando presupuesto:', error);
 

@@ -3,6 +3,14 @@ import { showError, showSuccess } from '../../utils/utils.js';
 import { MobileMenu } from '../../utils/mobile-menu.js';
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Control de acceso: solo administradores
+    const currentUser = sessionStorage.getItem('currentAdmin');
+    if (!currentUser) {
+        alert("Error: Debe iniciar sesión como administrador.");
+        window.location.href = 'admin.html';
+        return;
+    }
+
     new MobileMenu();
 
     // Elementos principales
@@ -26,6 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let clients = [];
     let computers = [];
     let currentClient = null;
+    let currentStatusFilter = '';
 
     // Inicializar
     loadData();
@@ -57,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td>${budget.budgetNumber}</td>
+                <td>${budget.id}</td>
                 <td>${client ? client.name : 'N/A'}</td>
                 <td>${computer ? computer.type : 'N/A'}</td>
                 <td>${new Date(budget.emissionDate).toLocaleDateString()}</td>
@@ -65,55 +74,79 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td class="status-${budget.status.toLowerCase()}">${budget.status}</td>
                 <td>$${budget.totalAmount.toFixed(2)}</td>
                 <td class="actions-cell">
-                    <button class="btn-view" data-id="${budget.id}" title="Ver"><i class="fas fa-eye"></i></button>
-                    <button class="btn-edit" data-id="${budget.id}" title="Editar"><i class="fas fa-edit"></i></button>
+                    <button class="btn-edit" data-id="${budget.id}" title="Ver/Editar"><i class="fas fa-eye"></i></button>
                     <button class="btn-delete" data-id="${budget.id}" title="Eliminar"><i class="fas fa-trash"></i></button>
                 </td>
             `;
             budgetsList.appendChild(tr);
 
             // Event listeners para botones de acción
-            tr.querySelector('.btn-view').addEventListener('click', () => openViewModal(budget.id));
             tr.querySelector('.btn-edit').addEventListener('click', () => openEditModal(budget.id));
             tr.querySelector('.btn-delete').addEventListener('click', () => deleteBudget(budget.id));
         });
     }
 
+    // Event listener para el filtro de estado
+    document.getElementById('status-filter').addEventListener('change', (e) => {
+        currentStatusFilter = e.target.value;
+        filterByStatus();
+    });
+
+    // Función independiente para filtrar por estado
+    function filterByStatus() {
+        try {
+            let filteredBudgets = [...budgets];
+
+            if (currentStatusFilter) {
+                filteredBudgets = filteredBudgets.filter(b => b.status === currentStatusFilter);
+            }
+
+            renderBudgets(filteredBudgets);
+
+            if (filteredBudgets.length === 0) {
+                showError('No hay presupuestos con este estado', budgetsList);
+            }
+        } catch (error) {
+            showError('Error al filtrar por estado: ' + error.message, budgetsList);
+        }
+    }
+
     // Buscar presupuestos
     searchBtn.addEventListener('click', async () => {
         const searchTerm = searchInput.value.trim();
-        
+
         if (!searchTerm) {
-            await loadData();
+            filterByStatus(); // Aplica solo el filtro de estado si existe
             return;
         }
 
         try {
-            // Buscar por número de presupuesto o DNI de cliente
             let results = [];
-            
-            // Si parece un número de presupuesto (BGT-001)
+
             if (searchTerm.toUpperCase().startsWith('BGT-')) {
                 const budget = await BudgetService.getById(searchTerm);
                 if (budget) results = [budget];
-            } 
-            // Si es un DNI (8 números)
+            }
             else if (/^\d{8}$/.test(searchTerm)) {
                 const client = await ClientService.getByDni(searchTerm);
                 if (client) {
                     results = await BudgetService.getByClient(client.id);
                 }
             }
-            // Búsqueda genérica
             else {
-                results = budgets.filter(b => 
-                    b.number.includes(searchTerm) ||
-                    (clients.find(c => c.id === b.clientId)?.name.toLowerCase().includes(searchTerm.toLowerCase()))
-                );
+                results = budgets.filter(b =>
+                    b.budgetNumber.includes(searchTerm) ||
+                    (clients.find(c => c.id === b.clientId)?.name.toLowerCase().includes(searchTerm.toLowerCase())
+                    ));
             }
 
-            renderBudgets(results.length > 0 ? results : []);
-            
+            // Aplica filtro de estado a los resultados de búsqueda
+            if (currentStatusFilter) {
+                results = results.filter(b => b.status === currentStatusFilter);
+            }
+
+            renderBudgets(results);
+
             if (results.length === 0) {
                 showError('No se encontraron presupuestos', budgetsList);
             }
@@ -131,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Buscar cliente por DNI
     document.getElementById('search-client-btn').addEventListener('click', async () => {
         const dni = document.getElementById('budget-client-dni').value.trim();
-        
+
         if (!dni) {
             showError('Ingrese un DNI', budgetForm);
             return;
@@ -146,21 +179,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             currentClient = client;
             document.getElementById('budget-client-name').value = client.name;
-            
+
             // Habilitar y cargar computadoras del cliente
             const computerSelect = document.getElementById('budget-computer');
             computerSelect.disabled = false;
             computerSelect.innerHTML = '<option value="">Seleccione computadora</option>';
 
-            console.log(computers);
-            console.log(client);
-
-        
-            const filterClient = client.computers.some(comp => comp.id === client.id);
-
-            console.log(filterClient);
-            
-            const clientComputers = computers.filter(c => client.computers.some(comp => comp.id === client.id));
+            const clientComputers = client.computers;
             if (clientComputers.length === 0) {
                 showError('El cliente no tiene computadoras registradas', budgetForm);
                 return;
@@ -169,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
             clientComputers.forEach(computer => {
                 const option = document.createElement('option');
                 option.value = computer.id;
-                option.textContent = `${computer.type} - ${computer.processor}`;
+                option.textContent = `${computer.id} - ${computer.processor}`;
                 computerSelect.appendChild(option);
             });
 
@@ -191,9 +216,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Calcular totales cuando cambian los valores
     document.addEventListener('input', (e) => {
-        if (e.target.classList.contains('job-hours') || 
+        if (e.target.classList.contains('job-hours') ||
             e.target.classList.contains('job-rate') ||
-            e.target.classList.contains('part-quantity') || 
+            e.target.classList.contains('part-quantity') ||
             e.target.classList.contains('part-price')) {
             calculateTotals();
         }
@@ -202,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Enviar formulario de nuevo presupuesto
     budgetForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         const computerId = document.getElementById('budget-computer').value;
         const validityDays = document.getElementById('budget-validity').value;
         const notes = document.getElementById('budget-notes').value;
@@ -223,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
             jobs.push({
                 description: item.querySelector('.job-description').value,
                 hours: parseFloat(item.querySelector('.job-hours').value),
-                rate: parseFloat(item.querySelector('.job-rate').value)
+                hourPrice: parseFloat(item.querySelector('.job-rate').value)
             });
         });
 
@@ -244,16 +269,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Crear objeto presupuesto
         const budgetData = {
-            clientId: currentClient.id,
-            computerId: computerId,
-            issueDate: issueDate.toISOString(),
-            expiryDate: expiryDate.toISOString(),
-            status: 'Pendiente',
-            notes: notes,
-            jobs: jobs,
-            parts: parts,
+            client: currentClient,
+            computer: await ComputerService.getById(computerId),
+            emissionDate: issueDate.toISOString().split('T')[0],
+            validityDate: expiryDate.toISOString().split('T')[0],
+            status: 'PENDIENTE',
+            comments: notes,
+            jobItems: jobs,
+            partItems: parts,
             totalAmount: parseFloat(document.getElementById('total-budget').value)
         };
+        console.log("Datos enviados al backend:", JSON.stringify(budgetData, null, 2)); // 👈 ¡Depuración clave!
 
         try {
             await BudgetService.create(budgetData);
@@ -283,14 +309,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Imprimir presupuesto
-    document.getElementById('print-budget-btn').addEventListener('click', () => {
-        window.print();
-    });
-
     // Funciones auxiliares
     function openModal(modal) {
-        modal.style.display = 'block';
+        modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
     }
 
@@ -414,51 +435,51 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function openViewModal(budgetId) {
-    try {
-        const budget = await BudgetService.getById(budgetId);
-        const client = clients.find(c => c.id === budget.clientId);
-        const computer = computers.find(c => c.id === budget.computerId);
-        
-        // Obtener trabajos y partes - versión corregida
-        let jobs = [];
-        let parts = [];
-        
-        // Verificar si los jobs vienen en el budget o hay que pedirlos por separado
-        if (budget.jobs && Array.isArray(budget.jobs)) {
-            jobs = budget.jobs;
-        } else {
-            // Si no vienen en el budget, hacer request separado
-            const jobsResponse = await JobService.getByBudget(budgetId);
-            jobs = Array.isArray(jobsResponse) ? jobsResponse : [];
-        }
-        
-        // Verificar si las parts vienen en el budget o hay que pedirlas por separado
-        if (budget.parts && Array.isArray(budget.parts)) {
-            parts = budget.parts;
-        } else {
-            // Si no vienen en el budget, hacer request separado
-            const partsResponse = await PartService.getByBudget(budgetId);
-            parts = Array.isArray(partsResponse) ? partsResponse : [];
-        }
+        try {
+            const budget = await BudgetService.getById(budgetId);
+            const client = clients.find(c => c.id === budget.clientId);
+            const computer = computers.find(c => c.id === budget.computerId);
 
-        // Llenar datos básicos
-        document.getElementById('budget-number').textContent = budget.budgetNumber;
-        document.getElementById('edit-client-name').value = client ? client.name : 'N/A';
-        document.getElementById('edit-computer-info').value = computer ? `${computer.type} - ${computer.processor}` : 'N/A';
-        document.getElementById('edit-issue-date').value = new Date(budget.emissionDate).toLocaleDateString();
-        document.getElementById('edit-expiry-date').value = new Date(budget.validityDate).toLocaleDateString();
-        document.getElementById('edit-status').value = budget.status;
-        document.getElementById('edit-notes').value = budget.notes || '';
+            // Obtener trabajos y partes - versión corregida
+            let jobs = [];
+            let parts = [];
 
-        // Llenar trabajos
-        const jobsContainer = document.getElementById('edit-jobs-container');
-        jobsContainer.innerHTML = '';
-        
-        if (jobs.length > 0) {
-            jobs.forEach(job => {
-                const div = document.createElement('div');
-                div.className = 'job-item';
-                div.innerHTML = `
+            // Verificar si los jobs vienen en el budget o hay que pedirlos por separado
+            if (budget.jobs && Array.isArray(budget.jobs)) {
+                jobs = budget.jobs;
+            } else {
+                // Si no vienen en el budget, hacer request separado
+                const jobsResponse = await JobService.getByBudget(budgetId);
+                jobs = Array.isArray(jobsResponse) ? jobsResponse : [];
+            }
+
+            // Verificar si las parts vienen en el budget o hay que pedirlas por separado
+            if (budget.parts && Array.isArray(budget.parts)) {
+                parts = budget.parts;
+            } else {
+                // Si no vienen en el budget, hacer request separado
+                const partsResponse = await PartService.getByBudget(budgetId);
+                parts = Array.isArray(partsResponse) ? partsResponse : [];
+            }
+
+            // Llenar datos básicos
+            document.getElementById('budget-number').textContent = budget.budgetNumber;
+            document.getElementById('edit-client-name').value = client ? client.name : 'N/A';
+            document.getElementById('edit-computer-info').value = computer ? `${computer.type} - ${computer.processor}` : 'N/A';
+            document.getElementById('edit-issue-date').value = new Date(budget.emissionDate).toLocaleDateString();
+            document.getElementById('edit-expiry-date').value = new Date(budget.validityDate).toLocaleDateString();
+            document.getElementById('edit-status').value = budget.status;
+            document.getElementById('edit-notes').value = budget.comments || '';
+
+            // Llenar trabajos
+            const jobsContainer = document.getElementById('edit-jobs-container');
+            jobsContainer.innerHTML = '';
+
+            if (jobs.length > 0) {
+                jobs.forEach(job => {
+                    const div = document.createElement('div');
+                    div.className = 'job-item';
+                    div.innerHTML = `
                     <div class="form-row">
                         <div class="form-group">
                             <label>Descripción</label>
@@ -478,21 +499,21 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                 `;
-                jobsContainer.appendChild(div);
-            });
-        } else {
-            jobsContainer.innerHTML = '<p class="no-items">No hay trabajos registrados</p>';
-        }
+                    jobsContainer.appendChild(div);
+                });
+            } else {
+                jobsContainer.innerHTML = '<p class="no-items">No hay trabajos registrados</p>';
+            }
 
-        // Llenar partes
-        const partsContainer = document.getElementById('edit-parts-container');
-        partsContainer.innerHTML = '';
-        
-        if (parts.length > 0) {
-            parts.forEach(part => {
-                const div = document.createElement('div');
-                div.className = 'part-item';
-                div.innerHTML = `
+            // Llenar partes
+            const partsContainer = document.getElementById('edit-parts-container');
+            partsContainer.innerHTML = '';
+
+            if (parts.length > 0) {
+                parts.forEach(part => {
+                    const div = document.createElement('div');
+                    div.className = 'part-item';
+                    div.innerHTML = `
                     <div class="form-row">
                         <div class="form-group">
                             <label>Descripción</label>
@@ -512,28 +533,28 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                 `;
-                partsContainer.appendChild(div);
-            });
-        } else {
-            partsContainer.innerHTML = '<p class="no-items">No hay partes registradas</p>';
+                    partsContainer.appendChild(div);
+                });
+            } else {
+                partsContainer.innerHTML = '<p class="no-items">No hay partes registradas</p>';
+            }
+
+            // Actualizar totales
+            const jobsTotal = jobs.reduce((sum, job) => sum + (job.hours * job.hourPrice), 0);
+            const partsTotal = parts.reduce((sum, part) => sum + (part.quantity * part.unitPrice), 0);
+
+            document.getElementById('edit-total-jobs').value = jobsTotal.toFixed(2);
+            document.getElementById('edit-total-parts').value = partsTotal.toFixed(2);
+            document.getElementById('edit-total-budget').value = (jobsTotal + partsTotal).toFixed(2);
+
+            // Configurar modal
+            editModal.setAttribute('data-budget-id', budgetId);
+            openModal(editModal);
+        } catch (error) {
+            console.error('Error detallado:', error);
+            showError('Error al cargar presupuesto: ' + error.message, budgetsList);
         }
-
-        // Actualizar totales
-        const jobsTotal = jobs.reduce((sum, job) => sum + (job.hours * job.rate), 0);
-        const partsTotal = parts.reduce((sum, part) => sum + (part.quantity * part.unitPrice), 0);
-        
-        document.getElementById('edit-total-jobs').value = jobsTotal.toFixed(2);
-        document.getElementById('edit-total-parts').value = partsTotal.toFixed(2);
-        document.getElementById('edit-total-budget').value = (jobsTotal + partsTotal).toFixed(2);
-
-        // Configurar modal
-        editModal.setAttribute('data-budget-id', budgetId);
-        openModal(editModal);
-    } catch (error) {
-        console.error('Error detallado:', error);
-        showError('Error al cargar presupuesto: ' + error.message, budgetsList);
     }
-}
 
     async function openEditModal(budgetId) {
         await openViewModal(budgetId); // Reutilizamos la misma función
@@ -543,7 +564,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function deleteBudget(budgetId) {
         if (!confirm('¿Está seguro que desea eliminar este presupuesto?')) return;
-        
+
         try {
             await BudgetService.delete(budgetId);
             showSuccess('Presupuesto eliminado correctamente', budgetsList);
@@ -566,5 +587,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Permitir búsqueda con Enter
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') searchBtn.click();
+    });
+
+    // Logout
+    document.querySelector('.logout-item a').addEventListener('click', (e) => {
+        e.preventDefault();
+        sessionStorage.removeItem('currentAdmin');
+        window.location.href = '../../index.html';
     });
 });

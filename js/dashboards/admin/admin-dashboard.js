@@ -26,7 +26,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 1. Equipos en reparación (solo en curso)
     try {
         const computers = await ComputerService.getAll();
-        const inRepair = computers.filter(c => c.status === 'EN_REPARACION').length;
+        const budgets = await BudgetService.getAll();
+        const inRepair = budgets.filter(b => b.status === 'EN_REPARACION').length;
         metrics.inRepair.textContent = inRepair;
         // 3. Equipos ingresados (total)
         metrics.totalComputers.textContent = computers.length;
@@ -80,6 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const budgetsList = document.getElementById('budgets-list');
     try {
         const allBudgets = await BudgetService.getByStatus('APROBADO');
+
         const recentBudgets = allBudgets.slice(0, 5);
 
         budgetsList.innerHTML = recentBudgets.map(budget => `

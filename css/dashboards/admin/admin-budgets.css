@@ -501,3 +501,82 @@ input[type="date"] {
     padding: 8px 12px;
     height: 38px; /* Para que coincida con otros inputs */
 }
+
+/* Asegurar que el modal esté centrado */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+    /* Flexbox para centrado */
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto; /* Por si el contenido es muy largo */
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 900px;
+    max-height: 90vh; /* Limita el alto */
+    overflow-y: auto; /* Scroll interno si es necesario */
+    position: relative;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    /* Asegura el centrado incluso en pantallas pequeñas */
+    margin: 20px; /* Espacio mínimo en móviles */
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.status-filter {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+    .status-filter {
+        width: 100%;
+        margin: 10px 0;
+    }
+}
+
+/* Estilos para estados */
+.status-pendiente {
+    color: #ffc107;
+    font-weight: 500;
+}
+
+.status-aprobado {
+    color: #28a745;
+    font-weight: 500;
+}
+
+.status-rechazado {
+    color: #dc3545;
+    font-weight: 500;
+}
+
+.status-en-reparacion {
+    color: #fd7e14;
+    font-weight: 500;
+}
+
+.status-completado {
+    color: #17a2b8;
+    font-weight: 500;
+}
