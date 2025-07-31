@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
             clientComputers.forEach(computer => {
                 const option = document.createElement('option');
                 option.value = computer.id;
-                option.textContent = `${computer.id} - ${computer.processor}`;
+                option.textContent = `${computer.type} - ${computer.processor}`;
                 computerSelect.appendChild(option);
             });
 
