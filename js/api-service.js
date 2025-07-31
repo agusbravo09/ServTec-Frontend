@@ -2,7 +2,7 @@
  * api.service.js - Servicio para manejar todas las llamadas API
  */
 
-const BASE_URL = 'http://localhost:9001/api'; // Ajustar según entorno
+const BASE_URL = 'https://servtec-backend.onrender.com/api'; // Ajustar según entorno
 
 // Función base para todas las peticiones HTTP
 async function makeRequest(endpoint, method = 'GET', data = null, params = {}) {
