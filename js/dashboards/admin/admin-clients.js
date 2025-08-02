@@ -13,6 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     new MobileMenu();
 
+    function validateDNI(dni) {
+        return /^\d{8}$/.test(dni);
+    }
+
+    function validateEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email);
+    }
+
     // Carga de cliente
     const createForm = document.getElementById('client-create-form');
     createForm.addEventListener('submit', async (e) => {
@@ -22,6 +30,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const email = document.getElementById('new-email').value.trim();
         const cellphone = document.getElementById('new-cellphone').value.trim();
         const address = document.getElementById('new-address').value.trim();
+
+        // Validar DNI
+        if (!validateDNI(dni)) {
+            showError('El DNI debe contener exactamente 8 números', createForm);
+            return;
+        }
+
+        // Validar Email
+        if (!validateEmail(email)) {
+            showError('Por favor ingrese un email válido (ejemplo: usuario@dominio.com)', createForm);
+            return;
+        }
+
 
         try {
             await ClientService.create({ name, dni, email, cellphone, address });
@@ -77,6 +98,15 @@ document.addEventListener('DOMContentLoaded', () => {
     editForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!currentClient) return;
+
+        const email = document.getElementById('new-email').value.trim();
+
+        // Validar Email en edición
+        if (!validateEmail(email)) {
+            showError('Por favor ingrese un email válido (ejemplo: usuario@dominio.com)', editForm);
+            return;
+        }
+
         try {
             await ClientService.update(currentClient.id, {
                 name: document.getElementById('edit-name').value.trim(),
@@ -88,6 +118,21 @@ document.addEventListener('DOMContentLoaded', () => {
             showSuccess('Cliente actualizado correctamente', editForm);
         } catch (error) {
             showError('Error al actualizar cliente: ' + error.message, editForm);
+        }
+    });
+
+    // Restringir DNI a solo números (para ambos formularios)
+    document.getElementById('new-dni').addEventListener('input', function (e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length > 8) {
+            this.value = this.value.slice(0, 8);
+        }
+    });
+
+    document.getElementById('search-dni').addEventListener('input', function (e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length > 8) {
+            this.value = this.value.slice(0, 8);
         }
     });
 

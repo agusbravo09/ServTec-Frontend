@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td class="status-${budget.status.toLowerCase()}">${budget.status}</td>
                 <td>$${budget.totalAmount.toFixed(2)}</td>
                 <td class="actions-cell">
-                    <button class="btn-edit" data-id="${budget.id}" title="Ver/Editar"><i class="fas fa-eye"></i></button>
+                    <button class="btn-edit" data-id="${budget.id}" title="Ver/Editar"><i class="fas fa-edit"></i></button>
                     <button class="btn-delete" data-id="${budget.id}" title="Eliminar"><i class="fas fa-trash"></i></button>
                 </td>
             `;
@@ -297,10 +297,13 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const budgetId = editModal.getAttribute('data-budget-id');
         const status = document.getElementById('edit-status').value;
-        const notes = document.getElementById('edit-notes').value;
+        const comments = document.getElementById('edit-notes').value;
+        const expiryDateInput = document.getElementById('edit-expiry-date').value;
+
+        const expiryDate = expiryDateInput;
 
         try {
-            await BudgetService.update(budgetId, { status, notes });
+            await BudgetService.update(budgetId, { status, comments, validityDate: expiryDate });
             showSuccess('Presupuesto actualizado correctamente', editBudgetForm);
             closeModal(editModal);
             await loadData();
@@ -462,12 +465,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 parts = Array.isArray(partsResponse) ? partsResponse : [];
             }
 
+            // Formatear fechas para mostrar (DD/MM/YYYY)
+            const issueDate = new Date(budget.emissionDate + 'T00:00:00');
+            const expiryDate = new Date(budget.validityDate + 'T00:00:00');
+
+            // Formatear fechas para input type="date" (YYYY-MM-DD)
+            const formatDateForInput = (date) => {
+                const d = new Date(date);
+                const year = d.getFullYear();
+                const month = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
+
             // Llenar datos básicos
             document.getElementById('budget-number').textContent = budget.budgetNumber;
             document.getElementById('edit-client-name').value = client ? client.name : 'N/A';
             document.getElementById('edit-computer-info').value = computer ? `${computer.type} - ${computer.processor}` : 'N/A';
-            document.getElementById('edit-issue-date').value = new Date(budget.emissionDate).toLocaleDateString();
-            document.getElementById('edit-expiry-date').value = new Date(budget.validityDate).toLocaleDateString();
+            document.getElementById('edit-issue-date').value = issueDate.toLocaleDateString();
+            document.getElementById('edit-expiry-date').value = formatDateForInput(expiryDate);
             document.getElementById('edit-status').value = budget.status;
             document.getElementById('edit-notes').value = budget.comments || '';
 

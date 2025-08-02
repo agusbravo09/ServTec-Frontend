@@ -13,6 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     new MobileMenu();
 
+    function validateDNI(dni) {
+        return /^\d{8}$/.test(dni);
+    }
+
+
     // Selección de elementos principales
     const form = document.getElementById('computer-form');
     const editForm = document.getElementById('edit-modal-form');
@@ -60,6 +65,12 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         const dni = document.getElementById('comp-client-dni').value.trim();
 
+        // Validar DNI
+        if (!validateDNI(dni)) {
+            showError('El DNI debe contener exactamente 8 números', form);
+            return;
+        }
+
         try {
             const client = await ClientService.getByDni(dni);
             if (!client) {
@@ -91,6 +102,15 @@ document.addEventListener('DOMContentLoaded', () => {
             showError('Error al crear computadora: ' + error.message, form);
         }
     });
+
+    // Agregar control de input para el DNI (solo números y máximo 8 caracteres)
+    document.getElementById('comp-client-dni').addEventListener('input', function (e) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length > 8) {
+            this.value = this.value.slice(0, 8);
+        }
+    });
+
 
     // Búsqueda por DNI
     searchBtn.addEventListener('click', async () => {
