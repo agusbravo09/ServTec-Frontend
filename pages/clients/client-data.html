@@ -1,150 +1,110 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Cliente | ServTec</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../../css/dashboards/dashboard-styles.css">
     <link rel="stylesheet" href="../../css/dashboards/client-data-styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-
 <body>
-    <!-- Menú Hamburguesa (solo móvil) -->
-    <button class="menu-toggle" id="menuToggle">
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
         <i class="fas fa-bars"></i>
     </button>
-
-    <!-- Overlay para móvil -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
     <div class="dashboard-container">
-        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-content">
-                <!-- Avatar/Icono -->
-                <a href="client-dashboard.html">
+                <a href="client-dashboard.html" class="profile-link">
                     <div class="profile-icon">
-                        <img src="https://media.istockphoto.com/id/470100848/vector/male-profile-icon-white-on-the-blue-background.jpg?s=612x612&w=0&k=20&c=2Z3As7KdHqSKB6UDBpSIbMkwOgYQtbhSWrF1ZHX505E="
-                            alt="Perfil">
+                        <img src="https://media.istockphoto.com/id/470100848/vector/male-profile-icon-white-on-the-blue-background.jpg?s=612x612&w=0&k=20&c=2Z3As7KdHqSKB6UDBpSIbMkwOgYQtbhSWrF1ZHX505E=" alt="Perfil" loading="lazy">
+                    </div>
                 </a>
+                <nav class="sidebar-menu" aria-label="Main navigation">
+                    <ul>
+                        <li><a href="client-dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                        <li class="active"><a href="#"><i class="fas fa-user"></i><span>Mis datos</span></a></li>
+                        <li><a href="client-computers.html"><i class="fas fa-laptop"></i><span>Mis computadoras</span></a></li>
+                        <li><a href="client-budgets.html"><i class="fas fa-file-invoice-dollar"></i><span>Mis presupuestos</span></a></li>
+                        <li class="logout-item"><a href="#"><i class="fas fa-sign-out-alt"></i><span>Cerrar sesión</span></a></li>
+                    </ul>
+                </nav>
             </div>
+        </aside>
+        <main class="main-content">
+            <section class="client-data-section">
+                <div class="section-header">
+                    <h2>Mis Datos</h2>
+                </div>
+                <div class="client-data-card">
+                    <div class="client-data-header">
+                        <div class="client-main-info">
+                            <h3 id="client-fullname">Client name</h3>
+                            <div class="client-status">
+                                <span class="status-badge active">Cliente activo</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="client-details">
+                        <div class="detail-row">
+                            <div class="detail-item">
+                                <span class="detail-label">Documento</span>
+                                <span class="detail-value" id="client-dni">No especificado</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Teléfono</span>
+                                <span class="detail-value" id="client-cellphone">No especificado</span>
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-item">
+                                <span class="detail-label">Dirección</span>
+                                <span class="detail-value" id="client-address">No especificado</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Correo Electrónico</span>
+                                <span class="detail-value" id="client-email">No especificado</span>
+                            </div>
+                        </div>
+                        <form id="client-edit-form" class="edit-form" autocomplete="off">
+                            <div class="form-group">
+                                <label for="edit-name">Nombre</label>
+                                <input type="text" id="edit-name" required>
+                            </div>
 
-            <!-- Opciones del menú -->
-            <nav class="sidebar-menu">
-                <ul>
-                    <li class="active">
-                        <a href="#">
-                            <i class="fas fa-user"></i>
-                            <span>Mis datos</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="client-computers.html">
-                            <i class="fas fa-laptop"></i>
-                            <span>Mis computadoras</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="client-budgets.html">
-                            <i class="fas fa-file-invoice-dollar"></i>
-                            <span>Mis presupuestos</span>
-                        </a>
-                    </li>
-                    <li class="logout-item">
-                        <a href="#">
-                            <i class="fas fa-sign-out-alt"></i>
-                            <span>Cerrar sesión</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-    </div>
-    </aside>
+                            <div class="form-group">
+                                <label for="edit-email">Email</label>
+                                <input type="email" id="edit-email" required>
+                            </div>
 
-    <!-- Contenido Principal -->
-    <main class="main-content">
-        <!-- Sección de Mis Datos -->
-        <section class="client-data-section">
-            <div class="section-header">
-                <h2>Mis Datos</h2>
-            </div>
+                            <div class="form-group">
+                                <label for="edit-cellphone">Teléfono</label>
+                                <input type="text" id="edit-cellphone">
+                            </div>
 
-            <div class="client-data-card">
-                <div class="client-data-header">
-                    <div class="client-main-info">
-                        <h3 id="client-fullname">Client name</h3>
-                        <div class="client-status">
-                            <span class="status-badge active">Cliente activo</span>
+                            <div class="form-group">
+                                <label for="edit-address">Dirección</label>
+                                <input type="text" id="edit-address">
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-cancel" id="cancel-edit-btn">Cancelar</button>
+                                <button type="submit" class="btn btn-save">Guardar cambios</button>
+                            </div>
+                        </form>
+                        <div class="client-actions">
+                            <button class="btn-edit" id="edit-client-btn">
+                                <i class="fas fa-edit" aria-hidden="true"></i> Editar datos
+                            </button>
                         </div>
                     </div>
                 </div>
-
-                <div class="client-details">
-                    <div class="detail-row">
-                        <div class="detail-item">
-                            <span class="detail-label">Documento</span>
-                            <span class="detail-value" id="client-dni">No especificado</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Teléfono</span>
-                            <span class="detail-value" id="client-cellphone">No especificado</span>
-                        </div>
-                    </div>
-
-                    <div class="detail-row">
-                        <div class="detail-item">
-                            <span class="detail-label">Dirección</span>
-                            <span class="detail-value" id="client-address">No especificado</span>
-                        </div>
-                        <div class="detail-item">
-                            <span class="detail-label">Correo Electrónico</span>
-                            <span class="detail-value" id="client-email">No especificado</span>
-                        </div>
-                    </div>
-
-                    <!-- Formulario de edición (actualizado) -->
-                    <form id="client-edit-form" class="edit-form" autocomplete="off">
-                        <div class="form-group">
-                            <label for="edit-name">Nombre</label>
-                            <input type="text" id="edit-name" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="edit-email">Email</label>
-                            <input type="email" id="edit-email" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="edit-cellphone">Teléfono</label>
-                            <input type="text" id="edit-cellphone">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="edit-address">Dirección</label>
-                            <input type="text" id="edit-address">
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="button" class="btn btn-cancel" id="cancel-edit-btn">Cancelar</button>
-                            <button type="submit" class="btn btn-save">Guardar cambios</button>
-                        </div>
-                    </form>
-
-                    <div class="client-actions">
-                        <button class="btn-edit" id="edit-client-btn">
-                            <i class="fas fa-edit"></i> Editar datos
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+            </section>
+        </main>
     </div>
     <script type="module" src="../../js/utils/mobile-menu.js"></script>
     <script type="module" src="../../js/dashboards/client-data.js"></script>
     <script type="module" src="../../js/utils/session-utils.js"></script>
 </body>
-
 </html>

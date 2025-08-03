@@ -5,12 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administrar Presupuestos | ServTec</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../../css/dashboards/dashboard-styles.css">
     <link rel="stylesheet" href="../../css/dashboards/admin/admin-dashboard.css">
     <link rel="stylesheet" href="../../css/dashboards/admin/admin-budgets.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-
 <body>
     <button class="menu-toggle" id="menuToggle">
         <i class="fas fa-bars"></i>
@@ -88,7 +87,6 @@
                             Presupuesto</button>
                     </div>
                 </div>
-
                 <div class="budgets-table-container">
                     <table class="budgets-table">
                         <thead>
@@ -111,7 +109,6 @@
             </section>
         </main>
     </div>
-
     <!-- Modal para nuevo presupuesto -->
     <div id="add-budget-modal" class="modal">
         <div class="modal-content">
@@ -132,7 +129,6 @@
                         <input type="text" id="budget-client-name" readonly>
                     </div>
                 </div>
-
                 <div class="form-row">
                     <div class="form-group">
                         <label for="budget-computer">Computadora</label>
@@ -150,12 +146,10 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label for="budget-notes">Observaciones</label>
                     <textarea id="budget-notes" rows="3"></textarea>
                 </div>
-
                 <h3>Items de Trabajo</h3>
                 <div id="jobs-container">
                     <div class="job-item">
@@ -182,7 +176,6 @@
                 </div>
                 <button type="button" id="add-job-btn" class="btn-add-small"><i class="fas fa-plus"></i> Agregar
                     Trabajo</button>
-
                 <h3>Partes/Repuestos</h3>
                 <div id="parts-container">
                     <div class="part-item">
@@ -209,7 +202,6 @@
                 </div>
                 <button type="button" id="add-part-btn" class="btn-add-small"><i class="fas fa-plus"></i> Agregar
                     Parte</button>
-
                 <div class="summary">
                     <div class="form-row">
                         <div class="form-group">
@@ -231,7 +223,6 @@
             </form>
         </div>
     </div>
-
     <!-- Modal para ver/editar presupuesto -->
     <div id="edit-budget-modal" class="modal">
         <div class="modal-content">
@@ -248,7 +239,6 @@
                         <input type="text" id="edit-computer-info" readonly>
                     </div>
                 </div>
-
                 <div class="form-row">
                     <div class="form-group">
                         <label>Fecha Emisión</label>
@@ -269,12 +259,10 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label for="edit-notes">Observaciones</label>
                     <textarea id="edit-notes" rows="3"></textarea>
                 </div>
-
                 <h3>Items de Trabajo</h3>
                 <div id="edit-jobs-container">
                     <!-- Los trabajos se cargarán aquí dinámicamente -->
@@ -288,7 +276,6 @@
                 </div>
                 <button type="button" id="add-edit-part-btn" class="btn-add-small"><i class="fas fa-plus"></i> Agregar
                     Parte</button>
-
                 <div class="summary">
                     <div class="form-row">
                         <div class="form-group">
@@ -310,7 +297,6 @@
             </form>
         </div>
     </div>
-
     <script type="module" src="../../js/utils/mobile-menu.js"></script>
     <script type="module" src="../../js/utils/session-utils.js"></script>
     <script type="module" src="../../js/dashboards/admin/admin-budgets.js"></script>

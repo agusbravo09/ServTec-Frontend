@@ -4,115 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Computadoras | ServTec</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../../css/dashboards/dashboard-styles.css">
     <link rel="stylesheet" href="../../css/dashboards/client-computers-styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <!-- Menú Hamburguesa -->
-    <button class="menu-toggle" id="menuToggle">
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
         <i class="fas fa-bars"></i>
     </button>
-    
-    <!-- Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
     <div class="dashboard-container">
-        <!-- Sidebar (igual que en client-dashboard.html) -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-content">
-                <a href="client-dashboard.html"><div class="profile-icon">
-                    <img src="https://media.istockphoto.com/id/470100848/vector/male-profile-icon-white-on-the-blue-background.jpg?s=612x612&w=0&k=20&c=2Z3As7KdHqSKB6UDBpSIbMkwOgYQtbhSWrF1ZHX505E=" alt="Perfil">
-                </div></a>
-                <nav class="sidebar-menu">
+                <a href="client-dashboard.html" class="profile-link">
+                    <div class="profile-icon">
+                        <img src="https://media.istockphoto.com/id/470100848/vector/male-profile-icon-white-on-the-blue-background.jpg?s=612x612&w=0&k=20&c=2Z3As7KdHqSKB6UDBpSIbMkwOgYQtbhSWrF1ZHX505E=" alt="Perfil" loading="lazy">
+                    </div>
+                </a>
+                <nav class="sidebar-menu" aria-label="Main navigation">
                     <ul>
-                        <li>
-                            <a href="client-data.html">
-                                <i class="fas fa-user"></i>
-                                <span>Mis datos</span>
-                            </a>
-                        </li>
-                        <li class="active">
-                            <a href="#">
-                                <i class="fas fa-laptop"></i>
-                                <span>Mis computadoras</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="client-budgets.html">
-                                <i class="fas fa-file-invoice-dollar"></i>
-                                <span>Mis presupuestos</span>
-                            </a>
-                        </li>
-                        <li class="logout-item">
-                            <a href="#">
-                                <i class="fas fa-sign-out-alt"></i>
-                                <span>Cerrar sesión</span>
-                            </a>
-                        </li>
+                        <li><a href="client-dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                        <li><a href="client-data.html"><i class="fas fa-user"></i><span>Mis datos</span></a></li>
+                        <li class="active"><a href="#"><i class="fas fa-laptop"></i><span>Mis computadoras</span></a></li>
+                        <li><a href="client-budgets.html"><i class="fas fa-file-invoice-dollar"></i><span>Mis presupuestos</span></a></li>
+                        <li class="logout-item"><a href="#"><i class="fas fa-sign-out-alt"></i><span>Cerrar sesión</span></a></li>
                     </ul>
                 </nav>
             </div>
         </aside>
-
-        <!-- Contenido Principal - Sección Computadoras -->
         <main class="main-content">
             <section class="computers-section">
                 <div class="section-header">
                     <h1>Mis Computadoras</h1>
                 </div>
-
-                <!-- Contenedor de las Cards -->
                 <div class="computers-container" id="computers-container">
-                    <!-- Ejemplo de una computadora (se cargarán dinámicamente) -->
                     <div class="computer-card">
                         <div class="computer-header">
                             <div class="computer-type-badge laptop">
-                                <i class="fas fa-laptop"></i>
+                                <i class="fas fa-laptop" aria-hidden="true"></i>
                                 <span>Laptop</span>
                             </div>
-                            <span class="computer-id">#39</span>
+                            <span class="computer-id">#</span>
                         </div>
-                        
                         <div class="computer-specs">
                             <div class="spec-item">
                                 <span class="spec-label">Procesador:</span>
-                                <span class="spec-value">Intel i5</span>
+                                <span class="spec-value"></span>
                             </div>
                             <div class="spec-item">
                                 <span class="spec-label">RAM:</span>
-                                <span class="spec-value">8GB</span>
+                                <span class="spec-value"></span>
                             </div>
                             <div class="spec-item">
                                 <span class="spec-label">Almacenamiento:</span>
-                                <span class="spec-value">256GB SSD</span>
+                                <span class="spec-value"></span>
                             </div>
                             <div class="spec-item">
                                 <span class="spec-label">Placa Madre:</span>
-                                <span class="spec-value">Asus 21</span>
+                                <span class="spec-value"></span>
                             </div>
                         </div>
-                        
                         <div class="computer-footer">
                             <div class="budgets-info">
-                                <i class="fas fa-file-invoice-dollar"></i>
-                                <span>2 presupuestos asociados</span>
+                                <i class="fas fa-file-invoice-dollar" aria-hidden="true"></i>
+                                <span>2 presupuestos</span>
                             </div>
                             <div class="computer-actions">
                                 <button class="btn-budgets">
-                                    <i class="fas fa-eye"></i> Ver
-                                </button>
-                                <button class="btn-edit">
-                                    <i class="fas fa-edit"></i>
+                                    <i class="fas fa-eye" aria-hidden="true"></i> Ver
                                 </button>
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- Estado cuando no hay computadoras -->
                     <div class="no-computers" style="display: none;">
                         <div class="empty-state">
-                            <i class="fas fa-laptop"></i>
+                            <i class="fas fa-laptop" aria-hidden="true"></i>
                             <h3>No hay computadoras registradas</h3>
                         </div>
                     </div>
@@ -120,8 +86,6 @@
             </section>
         </main>
     </div>
-
-    <!-- Scripts -->
     <script type="module" src="../../js/utils/mobile-menu.js"></script>
     <script type="module" src="../../js/utils/session-utils.js"></script>
     <script type="module" src="../../js/dashboards/client-computers.js"></script>

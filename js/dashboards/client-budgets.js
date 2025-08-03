@@ -4,41 +4,28 @@ import { MobileMenu } from '../utils/mobile-menu.js';
 
 export class BudgetsSection {
     constructor() {
-        this.budgetsContainer = document.getElementById('budgets-container');
-        this.statusFilter = document.getElementById('budget-status-filter');
+        this.elements = {
+            container: document.getElementById('budgets-container'),
+            statusFilter: document.getElementById('budget-status-filter'),
+            logoutLink: document.querySelector('.logout-item a')
+        };
+        
         this.clientData = JSON.parse(sessionStorage.getItem('currentClient'));
-        const urlParams = new URLSearchParams(window.location.search);
-        this.computerIdFilter = urlParams.get('computerId');
-        this.setupLogout();
+        this.urlParams = new URLSearchParams(window.location.search);
+        this.computerIdFilter = this.urlParams.get('computerId');
         this.budgets = [];
         this.computers = [];
-        this.init();
+        
         new MobileMenu();
+        this.init();
     }
 
     async init() {
-        if (!this.clientData) {
-            window.location.href = '../../index.html';
-            alert("Error: Debe ingresar un documento primero.");
-            return;
-        }
+        if (!this.clientData) return this.redirectToLogin();
 
         try {
-            // Cargar presupuestos (con filtro si existe)
-            this.budgets = await BudgetService.getByClient(this.clientData.id);
-            this.computers = await ComputerService.getByClient(this.clientData.id);
-
-            // Aplicar filtro por computadora si existe
-            if (this.computerIdFilter) {
-                this.budgets = this.budgets.filter(budget => {
-                    const budgetComputerId = budget.computer?.id || budget.computerId;
-                    return budgetComputerId == this.computerIdFilter;
-                });
-
-                // Mostrar mensaje indicando el filtro
-                this.showComputerFilterInfo();
-            }
-
+            await this.loadData();
+            if (this.computerIdFilter) this.showComputerFilterInfo();
             this.renderBudgets(this.budgets);
             this.setupEventListeners();
         } catch (error) {
@@ -47,116 +34,123 @@ export class BudgetsSection {
         }
     }
 
+    async loadData() {
+        [this.budgets, this.computers] = await Promise.all([
+            BudgetService.getByClient(this.clientData.id),
+            ComputerService.getByClient(this.clientData.id)
+        ]);
+
+        if (this.computerIdFilter) {
+            this.budgets = this.budgets.filter(budget => {
+                const budgetComputerId = budget.computer?.id || budget.computerId;
+                return budgetComputerId == this.computerIdFilter;
+            });
+        }
+    }
+
+    redirectToLogin() {
+        window.location.href = '../../index.html';
+        alert("Error: Debe ingresar un documento primero.");
+    }
+
     showComputerFilterInfo() {
         const computer = this.computers.find(c => c.id == this.computerIdFilter);
-        if (computer) {
-            const filterInfo = document.createElement('div');
-            filterInfo.className = 'filter-info';
-            filterInfo.innerHTML = `
-                <i class="fas fa-laptop"></i>
-                <span>Mostrando presupuestos para: ${computer.type} ${computer.brand || ''} ${computer.model || ''}</span>
-                <a href="client-budgets.html" class="clear-filter">
-                    <i class="fas fa-times"></i> Limpiar filtro
-                </a>
-            `;
-            this.budgetsContainer.prepend(filterInfo);
-        }
+        if (!computer) return;
+
+        const filterInfo = document.createElement('div');
+        filterInfo.className = 'filter-info';
+        filterInfo.innerHTML = `
+            <i class="fas fa-laptop"></i>
+            <span>Mostrando presupuestos para: ${computer.type} ${computer.brand || ''} ${computer.model || ''}</span>
+            <a href="client-budgets.html" class="clear-filter">
+                <i class="fas fa-times"></i> Limpiar filtro
+            </a>
+        `;
+        this.elements.container.prepend(filterInfo);
     }
 
     renderBudgets(budgetsToRender) {
-        if (!budgetsToRender || budgetsToRender.length === 0) {
-            this.budgetsContainer.innerHTML = `
-                <div class="no-budgets">
-                    <i class="fas fa-file-invoice-dollar"></i>
-                    <p>No se encontraron presupuestos</p>
-                </div>
-            `;
+        if (!budgetsToRender?.length) {
+            this.elements.container.innerHTML = this.getNoBudgetsHTML();
             return;
         }
 
-        this.budgetsContainer.innerHTML = budgetsToRender.map(budget => {
-            // Buscar la computadora asociada
-            const computer = this.computers.find(c => c.id === (budget.computer?.id || budget.computerId));
+        this.elements.container.innerHTML = budgetsToRender.map(budget => 
+            this.getBudgetCardHTML(budget)
+        ).join('');
+    }
 
-            return `
-                <div class="budget-card" data-status="${budget.status.toLowerCase()}">
-                    <div class="budget-header">
-                        <span class="budget-id">Presupuesto #${budget.id}</span>
-                        <span class="budget-status status-${budget.status.toLowerCase()}">
-                            ${formatStatus(budget.status)}
-                        </span>
-                    </div>
-                    
-                    <div class="budget-info">
-                        <div class="info-row">
-                            <span class="info-label">Equipo:</span>
-                            <span class="info-value">${computer?.type || 'No especificado'}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Fecha:</span>
-                            <span class="info-value">${formatDate(budget.emissionDate)}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Total:</span>
-                            <span class="info-value">${budget.totalAmount ? '$' + budget.totalAmount : 'No especificado'}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="budget-footer">
-                        <button class="btn-details" data-budget-id="${budget.id}">
-                            <i class="fas fa-search"></i> Ver detalles
-                        </button>
-                    </div>
+    getBudgetCardHTML(budget) {
+        const computer = this.computers.find(c => c.id === (budget.computer?.id || budget.computerId));
+
+        return `
+            <div class="budget-card" data-status="${budget.status.toLowerCase()}">
+                <div class="budget-header">
+                    <span class="budget-id">Presupuesto #${budget.id}</span>
+                    <span class="budget-status status-${budget.status.toLowerCase()}">
+                        ${formatStatus(budget.status)}
+                    </span>
                 </div>
-            `;
-        }).join('');
+                
+                <div class="budget-info">
+                    ${this.getBudgetInfoRows(budget, computer)}
+                </div>
+                
+                <div class="budget-footer">
+                    <button class="btn-details" data-budget-id="${budget.id}">
+                        <i class="fas fa-search"></i> Ver detalles
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    getBudgetInfoRows(budget, computer) {
+        return [
+            { label: 'Equipo:', value: computer?.type || 'No especificado' },
+            { label: 'Fecha:', value: formatDate(budget.emissionDate) },
+            { label: 'Total:', value: budget.totalAmount ? '$' + budget.totalAmount : 'No especificado' }
+        ].map(({label, value}) => `
+            <div class="info-row">
+                <span class="info-label">${label}</span>
+                <span class="info-value">${value}</span>
+            </div>
+        `).join('');
     }
 
     setupEventListeners() {
-        // Filtro por estado
-        this.statusFilter.addEventListener('change', (e) => {
+        this.elements.statusFilter?.addEventListener('change', (e) => {
             const selectedStatus = e.target.value;
-            let filteredBudgets = this.budgets;
-
-            if (selectedStatus !== 'all') {
-                filteredBudgets = this.budgets.filter(
-                    budget => budget.status === selectedStatus
-                );
-            }
-
+            const filteredBudgets = selectedStatus === 'all' 
+                ? this.budgets 
+                : this.budgets.filter(b => b.status === selectedStatus);
             this.renderBudgets(filteredBudgets);
         });
 
-        // Botones de detalles
-        this.budgetsContainer.addEventListener('click', (e) => {
+        this.elements.container.addEventListener('click', (e) => {
             const btn = e.target.closest('.btn-details');
-            if (btn) {
-                this.showBudgetDetails(btn.dataset.budgetId);
-            }
+            if (btn) this.showBudgetDetails(btn.dataset.budgetId);
         });
-    }
 
-    showBudgetDetails(budgetId) {
-        // Aquí implementarías la lógica para mostrar los detalles completos
-        // Podría ser un modal, una nueva página, etc.
-        console.log('Mostrando detalles del presupuesto:', budgetId);
-        // Ejemplo:
-        window.location.href = `budget-details.html?id=${budgetId}`;
-    }
-
-    setupLogout() {
-        const logoutLink = document.querySelector('.logout-item a');
-        if (!logoutLink) return;
-
-        logoutLink.addEventListener('click', (e) => {
+        this.elements.logoutLink?.addEventListener('click', (e) => {
             e.preventDefault();
             sessionStorage.removeItem('currentClient');
             window.location.href = '../../index.html';
         });
     }
+
+    showBudgetDetails(budgetId) {
+        window.location.href = `budget-details.html?id=${budgetId}`;
+    }
+
+    getNoBudgetsHTML() {
+        return `
+            <div class="no-budgets">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <p>No se encontraron presupuestos</p>
+            </div>
+        `;
+    }
 }
 
-// Inicialización
-document.addEventListener('DOMContentLoaded', () => {
-    new BudgetsSection();
-});
+document.addEventListener('DOMContentLoaded', () => new BudgetsSection());

@@ -164,8 +164,6 @@
 .btn-reject:hover {
     background-color: var(--dark-red);
 }
-
-/* Estados de presupuesto (igual que en client-budgets-styles.css) */
 .status-pendiente {
     background-color: #fff3cd;
     color: #856404;

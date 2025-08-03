@@ -4,67 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Presupuestos | ServTec</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../../css/dashboards/dashboard-styles.css">
     <link rel="stylesheet" href="../../css/dashboards/client-budgets-styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <!-- Menú Hamburguesa -->
-    <button class="menu-toggle" id="menuToggle">
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
         <i class="fas fa-bars"></i>
     </button>
-
-    <!-- Overlay -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
     <div class="dashboard-container">
-        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-content">
-                <a href="client-dashboard.html">
+                <a href="client-dashboard.html" class="profile-link">
                     <div class="profile-icon">
-                        <img src="https://media.istockphoto.com/id/470100848/vector/male-profile-icon-white-on-the-blue-background.jpg?s=612x612&w=0&k=20&c=2Z3As7KdHqSKB6UDBpSIbMkwOgYQtbhSWrF1ZHX505E="
-                            alt="Perfil">
+                        <img src="https://media.istockphoto.com/id/470100848/vector/male-profile-icon-white-on-the-blue-background.jpg?s=612x612&w=0&k=20&c=2Z3As7KdHqSKB6UDBpSIbMkwOgYQtbhSWrF1ZHX505E=" alt="Perfil" loading="lazy">
                     </div>
                 </a>
-                <nav class="sidebar-menu">
+                <nav class="sidebar-menu" aria-label="Main navigation">
                     <ul>
-                        <li>
-                            <a href="client-data.html">
-                                <i class="fas fa-user"></i>
-                                <span>Mis datos</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="client-computers.html">
-                                <i class="fas fa-laptop"></i>
-                                <span>Mis computadoras</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="fas fa-file-invoice-dollar"></i>
-                                <span>Mis presupuestos</span>
-                            </a>
-                        </li>
-                        <li class="logout-item">
-                            <a href="#">
-                                <i class="fas fa-sign-out-alt"></i>
-                                <span>Cerrar sesión</span>
-                            </a>
-                        </li>
+                        <li><a href="client-dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                        <li><a href="client-data.html"><i class="fas fa-user"></i><span>Mis datos</span></a></li>
+                        <li><a href="client-computers.html"><i class="fas fa-laptop"></i><span>Mis computadoras</span></a></li>
+                        <li><a href="#"><i class="fas fa-file-invoice-dollar"></i><span>Mis presupuestos</span></a></li>
+                        <li class="logout-item"><a href="#"><i class="fas fa-sign-out-alt"></i><span>Cerrar sesión</span></a></li>
                     </ul>
                 </nav>
             </div>
         </aside>
-
-        <!-- Contenido Principal -->
         <main class="main-content">
             <section class="budgets-section">
                 <div class="section-header">
                     <h1>Mis Presupuestos</h1>
                     <div class="filter-controls">
-                        <select id="budget-status-filter" class="filter-select">
+                        <select id="budget-status-filter" class="filter-select" aria-label="Filtrar por estado">
                             <option value="all">Todos los estados</option>
                             <option value="PENDIENTE">Pendientes</option>
                             <option value="APROBADO">Aprobados</option>
@@ -74,17 +47,15 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="budgets-container" id="budgets-container">
                     <div class="no-budgets">
-                        <i class="fas fa-file-invoice-dollar"></i>
+                        <i class="fas fa-file-invoice-dollar" aria-hidden="true"></i>
                         <p>No se encontraron presupuestos</p>
                     </div>
                 </div>
             </section>
         </main>
     </div>
-
     <script type="module" src="../../js/utils/mobile-menu.js"></script>
     <script type="module" src="../../js/utils/session-utils.js"></script>
     <script type="module" src="../../js/dashboards/client-budgets.js"></script>

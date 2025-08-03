@@ -1,16 +1,23 @@
-/* Sección de datos del cliente */
-.client-data-section {
-    background-color: var(--white);
-    border-radius: var(--card-border-radius);
-    padding: 25px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    margin-bottom: 30px;
+:root {
+    --white: #ffffff;
+    --primary-blue: #3498db;
+    --medium-gray: #e0e0e0;
+    --dark-gray: #2c3e50;
+    --success: #2ecc71;
+    --card-border-radius: 10px;
+    --transition-speed: 0.3s;
 }
 
+.client-data-section, 
 .client-data-card {
     background-color: var(--white);
     border-radius: var(--card-border-radius);
-    overflow: hidden;
+}
+
+.client-data-section {
+    padding: 25px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
 }
 
 .client-data-header {
@@ -23,8 +30,8 @@
 }
 
 .client-avatar {
-    text-align: center;
     flex: 0 0 120px;
+    text-align: center;
 }
 
 .client-avatar img {
@@ -67,7 +74,7 @@
     margin-bottom: 10px;
 }
 
-.client-status .status-badge {
+.status-badge {
     display: inline-block;
     padding: 4px 10px;
     border-radius: 12px;
@@ -75,7 +82,7 @@
     font-weight: 500;
 }
 
-.client-status .active {
+.status-badge.active {
     background-color: rgba(46, 204, 113, 0.1);
     color: var(--success);
 }
@@ -133,75 +140,9 @@
     background-color: var(--dark-blue);
 }
 
-/* Formulario de edición */
 .edit-form {
     display: none;
     margin-top: 20px;
-}
-
-.edit-form.active {
-    display: block;
-}
-
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    color: #666;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid var(--medium-gray);
-    border-radius: 4px;
-    font-size: 1rem;
-}
-
-.form-actions {
-    margin-top: 20px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
-
-.btn-cancel {
-    background-color: var(--medium-gray);
-    color: var(--dark-gray);
-}
-
-.btn-save {
-    background-color: var(--success);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .client-data-header {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .client-avatar {
-        margin-bottom: 20px;
-    }
-    
-    .client-actions {
-        text-align: center;
-    }
-    
-    .detail-item {
-        flex: 100%;
-    }
-}
-
-/* Estilos para el formulario de edición */
-.edit-form {
-    display: none;
-    margin-top: 30px;
     padding: 20px;
     background-color: var(--light-gray);
     border-radius: var(--card-border-radius);
@@ -273,8 +214,24 @@
     background-color: #27ae60;
 }
 
-/* Estilos para móviles */
 @media (max-width: 768px) {
+    .client-data-header {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .client-avatar {
+        margin-bottom: 20px;
+    }
+    
+    .client-actions {
+        text-align: center;
+    }
+    
+    .detail-item {
+        flex: 100%;
+    }
+    
     .form-actions {
         flex-direction: column;
     }

@@ -1,5 +1,5 @@
 /* Estilos base para la sección de presupuestos */
-.budgets-section {
+.budgets-section, .clients-section {
     padding: 20px;
     width: 100%;
     box-sizing: border-box;
@@ -41,7 +41,7 @@
     min-width: 0;
 }
 
-.btn-search, .btn-add {
+.btn-search, .btn-add, .btn-search-small, .btn-add-small {
     padding: 10px 15px;
     border: none;
     border-radius: 4px;
@@ -53,12 +53,12 @@
     white-space: nowrap;
 }
 
-.btn-search {
+.btn-search, .btn-search-small {
     background-color: #007bff;
     color: white;
 }
 
-.btn-search:hover {
+.btn-search:hover, .btn-search-small:hover {
     background-color: #0069d9;
 }
 
@@ -71,8 +71,8 @@
     background-color: #218838;
 }
 
-/* Contenedor de la tabla */
-.budgets-table-container {
+/* Contenedores de tabla */
+.budgets-table-container, .clients-table-container {
     overflow-x: auto;
     margin-top: 20px;
     background: white;
@@ -81,22 +81,22 @@
     width: 100%;
 }
 
-/* Estilos de la tabla */
-.budgets-table {
+/* Estilos de tabla */
+.budgets-table, .clients-table {
     width: 100%;
     border-collapse: collapse;
     min-width: 800px;
 }
 
-.budgets-table th, 
-.budgets-table td {
+.budgets-table th, .budgets-table td, 
+.clients-table th, .clients-table td {
     padding: 12px 15px;
     text-align: left;
     border-bottom: 1px solid #eee;
     vertical-align: middle;
 }
 
-.budgets-table th {
+.budgets-table th, .clients-table th {
     background-color: #f8f9fa;
     font-weight: 600;
     color: #495057;
@@ -104,28 +104,33 @@
     top: 0;
 }
 
-.budgets-table tr:hover {
+.budgets-table tr:hover, .clients-table tr:hover {
     background-color: #f5f5f5;
 }
 
 /* Estilos para estados */
-.status-pending {
+.status-pending, .status-pendiente {
     color: #ffc107;
     font-weight: 500;
 }
 
-.status-approved {
+.status-approved, .status-aprobado {
     color: #28a745;
     font-weight: 500;
 }
 
-.status-rejected {
+.status-rejected, .status-rechazado {
     color: #dc3545;
     font-weight: 500;
 }
 
-.status-completed {
+.status-completed, .status-completado {
     color: #17a2b8;
+    font-weight: 500;
+}
+
+.status-en-reparacion {
+    color: #fd7e14;
     font-weight: 500;
 }
 
@@ -147,21 +152,16 @@
 }
 
 .btn-view {
-    background-color: #17a2b8;
-    color: white;
-}
-
-.btn-view:hover {
-    background-color: #138496;
-}
-
-.btn-edit {
     background-color: #ffc107;
     color: #212529;
 }
 
-.btn-edit:hover {
+.btn-view:hover {
     background-color: #e0a800;
+}
+
+.btn-edit {
+    display: none;
 }
 
 .btn-delete {
@@ -187,13 +187,15 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    right: 0;
+    bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1000;
     display: none;
     justify-content: center;
     align-items: center;
+    overflow-y: auto;
+    animation: fadeIn 0.3s ease-out;
 }
 
 .modal.show {
@@ -210,6 +212,7 @@
     overflow-y: auto;
     position: relative;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    margin: 20px;
 }
 
 .close {
@@ -307,26 +310,6 @@
     flex: 1;
 }
 
-.btn-search-small, .btn-add-small {
-    padding: 10px;
-    min-width: 40px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-search-small {
-    background-color: #007bff;
-    color: white;
-}
-
-.btn-search-small:hover {
-    background-color: #0069d9;
-}
-
 .btn-add-small {
     background-color: #6c757d;
     color: white;
@@ -402,7 +385,71 @@
     background-color: #138496;
 }
 
-/* Media Queries para responsividad */
+/* Input de fecha */
+input[type="date"] {
+    padding: 8px 12px;
+    height: 38px;
+}
+
+/* Lista de computadoras */
+.computer-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.computer-list li {
+    margin-bottom: 5px;
+    padding: 5px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+/* Filtro de estado */
+.status-filter {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+/* Mensajes de error */
+.error-message {
+    color: #dc3545;
+    text-align: center;
+    padding: 10px;
+}
+
+/* Inputs editables */
+.edit-job-description,
+.edit-job-hours,
+.edit-job-rate,
+.edit-part-description,
+.edit-part-quantity,
+.edit-part-price {
+    background-color: #fff !important;
+    cursor: text !important;
+}
+
+/* Sin items */
+.no-items {
+    color: #6c757d;
+    font-style: italic;
+    text-align: center;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Media Queries */
 @media (min-width: 768px) {
     .action-bar {
         flex-direction: row;
@@ -433,6 +480,12 @@
     .modal-content {
         padding: 15px;
     }
+
+    .budgets-table th, .budgets-table td,
+    .clients-table th, .clients-table td {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -445,12 +498,6 @@
         display: none;
     }
 
-    .budgets-table th, 
-    .budgets-table td {
-        padding: 8px 10px;
-        font-size: 13px;
-    }
-
     .actions-cell {
         gap: 5px;
     }
@@ -459,124 +506,9 @@
         padding: 4px 6px;
         min-width: 28px;
     }
-}
 
-.no-items {
-    color: #6c757d;
-    font-style: italic;
-    text-align: center;
-    padding: 10px;
-    background-color: #f8f9fa;
-    border-radius: 4px;
-}
-
-/* Cambiar color del botón de vista/edición */
-.btn-view {
-    background-color: #ffc107;
-    color: #212529;
-}
-
-.btn-view:hover {
-    background-color: #e0a800;
-}
-
-/* Ocultar botón de editar separado (ya no es necesario) */
-.btn-edit {
-    display: none;
-}
-
-/* Estilos para inputs editables en el modal */
-.edit-job-description,
-.edit-job-hours,
-.edit-job-rate,
-.edit-part-description,
-.edit-part-quantity,
-.edit-part-price {
-    background-color: #fff !important;
-    cursor: text !important;
-}
-
-/* Input de fecha */
-input[type="date"] {
-    padding: 8px 12px;
-    height: 38px; /* Para que coincida con otros inputs */
-}
-
-/* Asegurar que el modal esté centrado */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    display: none;
-    /* Flexbox para centrado */
-    justify-content: center;
-    align-items: center;
-    overflow-y: auto; /* Por si el contenido es muy largo */
-    animation: fadeIn 0.3s ease-out;
-}
-
-.modal-content {
-    background: white;
-    padding: 25px;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 900px;
-    max-height: 90vh; /* Limita el alto */
-    overflow-y: auto; /* Scroll interno si es necesario */
-    position: relative;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    /* Asegura el centrado incluso en pantallas pequeñas */
-    margin: 20px; /* Espacio mínimo en móviles */
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.status-filter {
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
-    background-color: white;
-    cursor: pointer;
-    margin-right: 10px;
-}
-
-@media (max-width: 768px) {
     .status-filter {
         width: 100%;
         margin: 10px 0;
     }
-}
-
-/* Estilos para estados */
-.status-pendiente {
-    color: #ffc107;
-    font-weight: 500;
-}
-
-.status-aprobado {
-    color: #28a745;
-    font-weight: 500;
-}
-
-.status-rechazado {
-    color: #dc3545;
-    font-weight: 500;
-}
-
-.status-en-reparacion {
-    color: #fd7e14;
-    font-weight: 500;
-}
-
-.status-completado {
-    color: #17a2b8;
-    font-weight: 500;
 }

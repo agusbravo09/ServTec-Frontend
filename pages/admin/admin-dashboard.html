@@ -1,76 +1,40 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Administrador | ServTec</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../../css/dashboards/dashboard-styles.css">
     <link rel="stylesheet" href="../../css/dashboards/admin/admin-dashboard.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Chart.js para gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
-    <!-- Menú Hamburguesa -->
-    <button class="menu-toggle" id="menuToggle">
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
         <i class="fas fa-bars"></i>
     </button>
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <div class="dashboard-container">
-        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-content">
-                <a href="admin-dashboard.html">
+                <a href="admin-dashboard.html" class="profile-link">
                     <div class="profile-icon">
-                        <img src="https://media.istockphoto.com/id/470100848/vector/male-profile-icon-white-on-the-blue-background.jpg?s=612x612&w=0&k=20&c=2Z3As7KdHqSKB6UDBpSIbMkwOgYQtbhSWrF1ZHX505E="
-                            alt="Perfil">
+                        <img src="https://media.istockphoto.com/id/470100848/vector/male-profile-icon-white-on-the-blue-background.jpg?s=612x612&w=0&k=20&c=2Z3As7KdHqSKB6UDBpSIbMkwOgYQtbhSWrF1ZHX505E=" 
+                             alt="Perfil" loading="lazy">
                     </div>
                 </a>
-                <nav class="sidebar-menu">
+                <nav class="sidebar-menu" aria-label="Main navigation">
                     <ul>
-                        <li>
-                            <a href="#">
-                                <i class="fas fa-tachometer-alt"></i>
-                                <span>Dashboard</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="admin-client-details.html">
-                                <i class="fas fa-address-book"></i>
-                                <span>Tabla de clientes</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="admin-clients.html">
-                                <i class="fas fa-users"></i>
-                                <span>1. Clientes</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="admin-computers.html">
-                                <i class="fas fa-laptop"></i>
-                                <span>2. Computadoras</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="admin-budgets.html">
-                                <i class="fas fa-file-invoice-dollar"></i>
-                                <span>3. Presupuestos</span>
-                            </a>
-                        </li>
-                        <li class="logout-item">
-                            <a href="#">
-                                <i class="fas fa-sign-out-alt"></i>
-                                <span>Cerrar sesión</span>
-                            </a>
-                        </li>
+                        <li><a href="#"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                        <li><a href="admin-client-details.html"><i class="fas fa-address-book"></i><span>Tabla de clientes</span></a></li>
+                        <li><a href="admin-clients.html"><i class="fas fa-users"></i><span>1. Clientes</span></a></li>
+                        <li><a href="admin-computers.html"><i class="fas fa-laptop"></i><span>2. Computadoras</span></a></li>
+                        <li><a href="admin-budgets.html"><i class="fas fa-file-invoice-dollar"></i><span>3. Presupuestos</span></a></li>
+                        <li class="logout-item"><a href="#"><i class="fas fa-sign-out-alt"></i><span>Cerrar sesión</span></a></li>
                     </ul>
                 </nav>
             </div>
         </aside>
-        <!-- Contenido Principal -->
         <main class="main-content">
             <section class="welcome-section">
                 <h1>Bienvenido, Administrador</h1>
@@ -124,5 +88,4 @@
     <script type="module" src="../../js/utils/session-utils.js"></script>
     <script type="module" src="../../js/dashboards/admin/admin-dashboard.js"></script>
 </body>
-
 </html>

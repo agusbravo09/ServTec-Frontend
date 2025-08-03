@@ -1,81 +1,71 @@
 import { AdminService } from '../api-service.js';
 
-document.addEventListener('DOMContentLoaded', function() {
+const setupAdminLogin = () => {
     const loginForm = document.getElementById('admin-login-form');
+    if (!loginForm) return;
+
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
     const submitBtn = loginForm.querySelector('.btn-login');
-    const btnText = submitBtn.querySelector('.btn-text');
-    const btnLoading = submitBtn.querySelector('.btn-loading');
+    const [btnText, btnLoading] = ['btn-text', 'btn-loading']
+        .map(cls => submitBtn.querySelector(`.${cls}`));
     const loginError = document.getElementById('login-error');
 
-    // Manejador del submit
-    loginForm.addEventListener('submit', async function(e) {
+    const showError = (input, message) => {
+        input?.classList.add('input-error');
+        if (loginError) {
+            loginError.textContent = message;
+            loginError.style.display = 'block';
+        }
+    };
+
+    const resetFormState = () => {
+        [usernameInput, passwordInput].forEach(input => 
+            input?.classList.remove('input-error'));
+        if (loginError) loginError.style.display = 'none';
+    };
+
+    const setLoadingState = (isLoading) => {
+        if (!submitBtn) return;
+        submitBtn.disabled = isLoading;
+        if (btnText) btnText.style.display = isLoading ? 'none' : 'inline-block';
+        if (btnLoading) btnLoading.style.display = isLoading ? 'inline-block' : 'none';
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        // Resetear errores
-        loginError.style.display = 'none';
-        usernameInput.classList.remove('input-error');
-        passwordInput.classList.remove('input-error');
+        resetFormState();
 
-        const username = usernameInput.value.trim();
-        const password = passwordInput.value.trim();
+        const username = usernameInput?.value.trim();
+        const password = passwordInput?.value.trim();
 
-        // Validación básica
-        if (!username) {
-            showError(usernameInput, 'Ingrese un usuario');
-            return;
-        }
-        if (!password) {
-            showError(passwordInput, 'Ingrese una contraseña');
-            return;
-        }
+        if (!username) return showError(usernameInput, 'Ingrese un usuario');
+        if (!password) return showError(passwordInput, 'Ingrese una contraseña');
 
         try {
-            // Mostrar estado de carga
-            btnText.style.display = 'none';
-            btnLoading.style.display = 'inline-block';
-            submitBtn.disabled = true;
-
-            // Verificar credenciales
+            setLoadingState(true);
             const adminData = await AdminService.getByUsername(username);
             
-            if (!adminData) {
-                throw new Error('USER_NOT_FOUND');
-            }
+            if (!adminData) throw new Error('USER_NOT_FOUND');
+            if (adminData.password !== password) throw new Error('INVALID_PASSWORD');
             
-            if (adminData.password !== password) {
-                throw new Error('INVALID_PASSWORD');
-            }
-            
-            // Login exitoso
             sessionStorage.setItem('currentAdmin', JSON.stringify(adminData));
             window.location.href = 'admin-dashboard.html';
-
         } catch (error) {
             console.error('Error en login:', error);
-            
             if (error.message === 'USER_NOT_FOUND') {
                 showError(usernameInput, 'Usuario no registrado');
-            } 
-            else if (error.message === 'INVALID_PASSWORD') {
+            } else if (error.message === 'INVALID_PASSWORD') {
                 showError(passwordInput, 'Contraseña incorrecta');
-            }
-            else {
-                loginError.textContent = 'Error al conectar con el servidor';
-                loginError.style.display = 'block';
+            } else {
+                showError(null, 'Error al conectar con el servidor');
             }
         } finally {
-            // Restaurar botón
-            btnText.style.display = 'inline-block';
-            btnLoading.style.display = 'none';
-            submitBtn.disabled = false;
+            setLoadingState(false);
         }
-    });
+    };
 
-    function showError(input, message) {
-        input.classList.add('input-error');
-        loginError.textContent = message;
-        loginError.style.display = 'block';
-    }
-});
+    loginForm.addEventListener('submit', handleSubmit);
+};
+
+document.addEventListener('DOMContentLoaded', setupAdminLogin);

@@ -1,73 +1,62 @@
 /**
- * Módulo para manejar el menú hamburguesa y funcionalidades móviles
+ * Módulo optimizado para manejar el menú hamburguesa
  */
 export class MobileMenu {
   constructor() {
-    this.menuToggle = document.getElementById('menuToggle');
-    this.sidebar = document.getElementById('sidebar');
-    this.overlay = document.getElementById('sidebarOverlay');
-    
-    // Inicialización automática al crear instancia
+    this.elements = {
+      menuToggle: document.getElementById('menuToggle'),
+      sidebar: document.getElementById('sidebar'),
+      overlay: document.getElementById('sidebarOverlay'),
+      links: document.querySelectorAll('.sidebar-menu a')
+    };
+
     this.init();
   }
 
   init() {
-    if (!this.menuToggle || !this.sidebar || !this.overlay) {
+    const { menuToggle, sidebar, overlay } = this.elements;
+    if (!menuToggle || !sidebar || !overlay) {
       console.warn('Elementos del menú móvil no encontrados');
       return;
     }
 
     this.setupEventListeners();
     this.handleResponsiveBehavior();
-    
-    // Escuchar cambios de tamaño de ventana
     window.addEventListener('resize', this.handleResponsiveBehavior.bind(this));
   }
 
   setupEventListeners() {
-    // Toggle del menú
-    this.menuToggle.addEventListener('click', () => {
-      this.toggleMenu();
-    });
+    const { menuToggle, overlay, links } = this.elements;
 
-    // Cerrar al hacer clic en el overlay
-    this.overlay.addEventListener('click', () => {
-      this.closeMenu();
-    });
-
-    // Cerrar al hacer clic en enlaces (opcional)
-    document.querySelectorAll('.sidebar-menu a').forEach(link => {
+    menuToggle.addEventListener('click', this.toggleMenu.bind(this));
+    overlay.addEventListener('click', this.closeMenu.bind(this));
+    
+    links.forEach(link => {
       link.addEventListener('click', () => {
-        if (window.innerWidth <= 768) {
-          this.closeMenu();
-        }
+        if (window.innerWidth <= 768) this.closeMenu();
       });
     });
   }
 
   toggleMenu() {
-    this.sidebar.classList.toggle('active');
-    this.overlay.classList.toggle('active');
-    document.body.classList.toggle('menu-open');
+    const { sidebar, overlay } = this.elements;
+    [sidebar, overlay, document.body].forEach(el => 
+      el.classList.toggle('active'));
   }
 
   openMenu() {
-    this.sidebar.classList.add('active');
-    this.overlay.classList.add('active');
-    document.body.classList.add('menu-open');
+    const { sidebar, overlay } = this.elements;
+    [sidebar, overlay, document.body].forEach(el => 
+      el.classList.add('active'));
   }
 
   closeMenu() {
-    this.sidebar.classList.remove('active');
-    this.overlay.classList.remove('active');
-    document.body.classList.remove('menu-open');
+    const { sidebar, overlay } = this.elements;
+    [sidebar, overlay, document.body].forEach(el => 
+      el.classList.remove('active'));
   }
 
   handleResponsiveBehavior() {
-    if (window.innerWidth > 768) {
-      this.openMenu(); // Siempre abierto en desktop
-    } else {
-      this.closeMenu(); // Cerrado inicialmente en móvil
-    }
+    window.innerWidth > 768 ? this.openMenu() : this.closeMenu();
   }
 }

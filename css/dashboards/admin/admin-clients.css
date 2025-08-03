@@ -1,34 +1,48 @@
+:root {
+    --primary-blue: #3498db;
+    --success-green: #2ecc71;
+    --warning-yellow: #f1c40f;
+    --danger-red: #e74c3c;
+    --dark-gray: #2d3e50;
+    --medium-gray: #dbe6ec;
+    --light-gray: #f8fafc;
+    --card-radius: 12px;
+    --card-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    --transition: all 0.2s ease;
+}
+
 .clients-section {
     margin: 32px 0;
 }
 
 .section-header h1 {
     font-size: 1.5rem;
-    color: #3498db;
+    color: var(--primary-blue);
     margin-bottom: 24px;
     font-weight: 700;
 }
 
-.clients-grid {
+.clients-grid,
+.computers-grid,
+.computers-list-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 32px;
     align-items: start;
 }
 
+.clients-grid {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
 .computers-grid {
-    display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 32px;
     max-width: 1100px;
     margin: 0 auto;
 }
 
 .computers-list-grid {
-    display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 24px;
-    align-items: start;
 }
 
 .client-form-card,
@@ -36,30 +50,26 @@
 .client-edit-card,
 .computer-form-card,
 .computer-filter-card,
-.computer-list-card {
+.computer-list-card,
+.computer-card {
     background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
     padding: 24px 18px;
-    margin: 0; /* Elimina el margin-bottom para que el grid lo maneje */
-    max-width: 500px;
+    margin: 0;
     min-width: 0;
 }
 
 .computer-card {
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     padding: 18px 14px;
-    margin: 0;
-    min-width: 0;
+    border-radius: 10px;
 }
 
 .client-form-card h2,
 .client-search-card h2,
 .client-edit-card h2 {
     font-size: 1.15rem;
-    color: #2d3e50;
+    color: var(--dark-gray);
     margin-bottom: 16px;
     font-weight: 600;
 }
@@ -78,15 +88,15 @@
 
 .form-group input {
     padding: 8px 10px;
-    border: 1px solid #dbe6ec;
+    border: 1px solid var(--medium-gray);
     border-radius: 6px;
     font-size: 1rem;
-    background: #f8fafc;
+    background: var(--light-gray);
     transition: border-color 0.2s;
 }
 
 .form-group input:focus {
-    border-color: #3498db;
+    border-color: var(--primary-blue);
     outline: none;
 }
 
@@ -96,34 +106,17 @@
     border-radius: 6px;
     font-size: 1rem;
     cursor: pointer;
-    margin-right: 8px;
-    margin-top: 8px;
-    transition: background 0.2s;
+    margin: 8px 8px 0 0;
+    transition: var(--transition);
 }
 
-.btn-save {
-    background: #3498db;
-    color: #fff;
-}
+.btn-save { background: var(--primary-blue); color: #fff; }
+.btn-search { background: var(--success-green); color: #fff; }
+.btn-cancel { background: var(--warning-yellow); color: #fff; }
+.btn-delete { background: var(--danger-red); color: #fff; }
 
-.btn-search {
-    background: #2ecc71;
-    color: #fff;
-}
-
-.btn-cancel {
-    background: #f1c40f;
-    color: #fff;
-}
-
-.btn-delete {
-    background: #e74c3c;
-    color: #fff;
-}
-
-.success-message {
-    color: #2ecc71;
-    background: #eafaf1;
+.success-message,
+.error-message {
     padding: 8px 12px;
     border-radius: 6px;
     margin-top: 10px;
@@ -132,12 +125,14 @@
     gap: 8px;
 }
 
+.success-message {
+    color: var(--success-green);
+    background: #eafaf1;
+}
+
 .error-message {
-    color: #e74c3c;
+    color: var(--danger-red);
     background: #fdecea;
-    padding: 8px 12px;
-    border-radius: 6px;
-    margin-top: 10px;
 }
 
 .form-actions {
@@ -149,70 +144,22 @@
 
 .computers-stack > div {
     background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
     padding: 24px 18px;
-    margin-bottom: 32px;
+    margin: 0 auto 32px;
     max-width: 900px;
     width: 100%;
-    margin-left: auto;
-    margin-right: auto;
 }
 
-.computers-stack h2 {
-    font-size: 1.15rem;
-    color: #2d3e50;
-    margin-bottom: 16px;
-    font-weight: 600;
-}
-
-/* Haz que la tarjeta de listado ocupe ambas columnas */
 .computer-list-card {
     grid-column: 1 / span 2;
 }
 
-@media (max-width: 900px) {
-    .computer-list-card {
-        grid-column: span 1;
-    }
-}
-
-/* Responsive */
-@media (max-width: 700px) {
-    .client-form-card,
-    .client-search-card,
-    .client-edit-card {
-        max-width: 100%;
-        padding: 16px 8px;
-    }
-}
-
-/* Responsive: en móviles se apilan */
-@media (max-width: 900px) {
-    .clients-grid {
-        grid-template-columns: 1fr;
-        gap: 18px;
-    }
-    .computers-grid {
-        grid-template-columns: 1fr;
-        gap: 18px;
-    }
-    .computers-list-grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
-    }
-    .computers-stack > div {
-        max-width: 100%;
-        padding: 16px 8px;
-    }
-}
-
-/* Modal styles */
 .modal {
     position: fixed;
     z-index: 9999;
-    left: 0; top: 0;
-    width: 100vw; height: 100vh;
+    inset: 0;
     background: rgba(0,0,0,0.3);
     display: flex;
     align-items: center;
@@ -224,13 +171,9 @@
     padding: 40px 32px;
     border-radius: 16px;
     box-shadow: 0 4px 24px rgba(0,0,0,0.18);
-    min-width: 340px;
-    max-width: 520px;
     width: 100%;
+    max-width: 520px;
     position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
 }
 
 .close {
@@ -241,11 +184,34 @@
     cursor: pointer;
 }
 
-/* Responsive */
+@media (max-width: 900px) {
+    .clients-grid,
+    .computers-grid,
+    .computers-list-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+    
+    .computer-list-card {
+        grid-column: span 1;
+    }
+    
+    .computers-stack > div {
+        padding: 16px 8px;
+    }
+}
+
+@media (max-width: 700px) {
+    .client-form-card,
+    .client-search-card,
+    .client-edit-card {
+        padding: 16px 8px;
+    }
+}
+
 @media (max-width: 600px) {
     .modal-content {
-        min-width: 0;
-        max-width: 98vw;
         padding: 18px 8px;
+        max-width: 98vw;
     }
 }
