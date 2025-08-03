@@ -166,11 +166,11 @@ body {
     .login-card {
         padding: 20px;
     }
-    
+
     .brand-logo {
         font-size: 40px;
     }
-    
+
     .btn-admin {
         padding: 6px 10px;
         font-size: 14px;
@@ -180,20 +180,20 @@ body {
 .admin-login .brand-logo {
     color: #e74c3c;
 }
-        
+
 .admin-login .btn-login {
     background-color: #e74c3c;
 }
-        
+
 .admin-login .btn-login:hover {
     background-color: #c0392b;
 }
-        
+
 .admin-login .login-card {
     max-width: 380px;
 }
 
-a{
+a {
     text-decoration: none !important;
 }
 
@@ -202,7 +202,7 @@ a{
     cursor: not-allowed;
 }
 
-.input-error + .error-message {
+.input-error+.error-message {
     display: block;
 }
 
@@ -218,8 +218,15 @@ a{
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .input-error {
@@ -228,13 +235,44 @@ a{
 }
 
 @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-3px); }
-    40%, 80% { transform: translateX(3px); }
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20%,
+    60% {
+        transform: translateX(-3px);
+    }
+
+    40%,
+    80% {
+        transform: translateX(3px);
+    }
 }
 
 #login-error {
     margin: 10px 0;
     padding: 10px;
     border-left: 3px solid #e74c3c;
+}
+
+.server-notice {
+    background-color: #fff8e1;
+    border-left: 4px solid #ffc107;
+    padding: 12px 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #5d4037;
+}
+
+.server-notice i {
+    color: #ffa000;
+    margin-right: 8px;
+}
+
+.server-notice strong {
+    color: #e65100;
 }
